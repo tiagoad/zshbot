@@ -3,7 +3,7 @@
 # > .insultme
 # < Fuck you!
 function ircCmdInsultMe {
-	insult=$(curl -s http://www.insultgenerator.org/ | grep wrap -A3 | grep br | gcut -c 9- | rev | gcut -c 7- | rev)
+	insult=$(curl -s http://www.insultgenerator.org/ | grep wrap -A3 | grep br | cut -c 9- | rev | cut -c 7- | rev)
 
 	sendPrivMsg "$target" "$nick: $insult"
 }
