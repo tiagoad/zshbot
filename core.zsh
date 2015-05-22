@@ -1,5 +1,9 @@
 #!/usr/bin/env zsh
 
+# info
+VERSION="0.0.1"
+SOURCE="https://github.com/legfloss/zshbot"
+
 # load modules
 zmodload zsh/net/tcp
 zmodload zsh/regex
