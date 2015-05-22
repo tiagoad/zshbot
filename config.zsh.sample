@@ -1,0 +1,18 @@
+#!/usr/bin/env zsh
+# IRC bot configuration
+
+# server options
+HOST="irc.rizon.net"
+PORT="6667"
+NICK="zshbot"
+USER="zshbot"
+NAME="An IRC bot written in ZSH"
+CHANNELS=(
+	"#zshbot"
+	"#bots"
+)
+
+# instance options
+COMMAND_PREFIX="."
+RELOAD_INTERVAL="1"
+AUTH_PASSWORD="hackme"
