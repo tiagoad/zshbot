@@ -1,43 +1,35 @@
 #!/usr/bin/env zsh
 # A simple hook system in zsh
 
-# Generates a random prefix, so we can reload the config and not have duplicate hooks
-function initHooks {
-	HOOKPREFIX=$(base64 </dev/urandom | tr -dc 'A-Z' | head -c10)
-}
+# Associative array holding all the hooks
+HOOKS=()
 
 # Adds a function to a hook
 # addIrcHook <hook> <function>
 function addIrcHook {
-	# appends the function name to an array named IRC_HOOK_<hook name>.
-	# for example, for the hook "001", appends the function name to the
-	# IRC_HOOK_001 array
-	eval "IRC_HOOK_${HOOKPREFIX}_$1+=$2"
+	HOOKS+="SYNC $1 $2"
 }
 
 # Adds a function to an async hook
 # addIrcAsyncHook <hook> <function>
 function addIrcAsyncHook {
-	# appends the function name to an array named IRC_HOOK_<hook name>.
-	# for example, for the hook "001", appends the function name to the
-	# IRC_HOOK_001 array
-	eval "IRC_HOOK_ASYNC_${HOOKPREFIX}_$1+=$2"
+	HOOKS+="ASYNC $1 $2"
 }
 
 # Triggers a hook
 # triggerIrcHook <hook> <args>
-function triggerIrcHook {
-	#logLine "HOOK $1"
+function triggerIrcHook {	
+	for hook in $HOOKS; do
+		args=("${(@s/ /)hook}")
 
-	# calls each function hooked, with the specified args
-	for function in $(eval "echo \$IRC_HOOK_${HOOKPREFIX}_$1"); do
-		eval "$function \$@[2,-1]"
-	done
+		if [[ $args[2] == $1 ]]; then
+			cmd="$args[3] \$@[2,-1]"
 
-	# calls each function async hooked, with the specified args
-	for function in $(eval "echo \$IRC_HOOK_ASYNC_${HOOKPREFIX}_$1"); do
-		eval "$function \$@[2,-1]" &
+			if [[ $args[1] == "ASYNC" ]]; then
+				cmd="$cmd &"
+			fi
+
+			eval $cmd
+		fi
 	done
 }
-
-initHooks
