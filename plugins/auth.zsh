@@ -33,7 +33,7 @@ function isLineUserLoggedInOrError {
 	if isLineUserLoggedIn; then
 		return 0
 	else
-		sendPrivMsg "$nick" "You are not authorized to use this command"
+		sendNotice "$nick" "You are not authorized to use this command"
 		return 1
 	fi
 }
