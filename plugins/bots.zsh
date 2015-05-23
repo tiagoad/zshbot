@@ -2,15 +2,15 @@
 
 # > .bots
 # < Reporting in! [zsh]
-function ircCmdBots {
-	sendPrivMsg "$target" "Reporting in! [zsh]"
+function zshbot.bots.bots {
+	sendPrivMsg "$target" "Reporting in! [zsh] ~ try .source"
 }
-addIrcHook CMD_BOTS ircCmdBots
+zshbot.commands.registerCommand "bots" zshbot.bots.bots "Shows info about this bot" "bots"
 
 # > .source/.sauce
 # < https://github.com/legfloss/zshbot
-function ircCmdSource {
+function zshbot.bots.source {
 	sendPrivMsg "$target" "$SOURCE"
 }
-addIrcHook CMD_SOURCE ircCmdSource
-addIrcHook CMD_SAUCE ircCmdSource
+zshbot.commands.registerCommand "source" zshbot.bots.source "Show a link to this bot's source" "source"
+zshbot.commands.registerCommand "sauce" zshbot.bots.source  "Show a link to this bot's source" "sauce" "true"

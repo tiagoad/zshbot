@@ -5,20 +5,22 @@
 HOOKS=()
 
 # Adds a function to a hook
-# addIrcHook <hook> <function>
-function addIrcHook {
+# zshbot.hooks.registerHook <hook> <function>
+function zshbot.hooks.registerHook {
+	zshbot.util.logLine "Registered $1 -> $2 (SYNC)"
 	HOOKS+="SYNC $1 $2"
 }
 
 # Adds a function to an async hook
-# addIrcAsyncHook <hook> <function>
-function addIrcAsyncHook {
+# zshbot.hooks.registerAsyncHook <hook> <function>
+function zshbot.hooks.registerAsyncHook {
+	zshbot.util.logLine "Registered $1 -> $2 (ASYNC)"
 	HOOKS+="ASYNC $1 $2"
 }
 
 # Triggers a hook
-# triggerIrcHook <hook> <args>
-function triggerIrcHook {	
+# zshbot.hooks,triggerIrcHook <hook> <args>
+function zshbot.hooks.triggerHook {	
 	for hook in $HOOKS; do
 		args=("${(@s/ /)hook}")
 

@@ -2,21 +2,46 @@
 # Administrative commands
 
 # > .join <channel>
-function ircCmdJoin {
-	if isLineUserLoggedInOrError; then
-		sendLine "JOIN $2"
+function zshbot.admin.join {
+	if zshbot.auth.isThisUserLoggedInOrError; then
+		zshbot.util.sendLine "JOIN $2"
 	fi
 }
-addIrcHook CMD_JOIN ircCmdJoin
+zshbot.commands.registerCommand "join" zshbot.admin.join "Joins a channel" "join <channel>" true
 
 # > .part [channel]
-function ircCmdPart {
-	if isLineUserLoggedInOrError; then
+function zshbot.admin.part {
+	if zshbot.auth.isThisUserLoggedInOrError; then
 		if [[ $2 ]]; then
-			sendLine "PART $2"
+			zshbot.util.sendLine "PART $2"
 		else
-			sendLine "PART $target"
+			zshbot.util.sendLine "PART $target"
 		fi
 	fi
 }
-addIrcHook CMD_PART ircCmdPart
+zshbot.commands.registerCommand "part" zshbot.admin.part "Parts a channel" "part [channel]" true
+
+# > .raw <line>
+function zshbot.admin.raw {
+	if zshbot.auth.isThisUserLoggedInOrError; then
+		zshbot.util.sendLine "$@[2,-1]"
+	fi
+}
+zshbot.commands.registerCommand "raw" zshbot.admin.raw "Sends a raw line to the server" "raw <line>" true
+
+# > .eval <line>
+function zshbot.admin.eval {
+	if zshbot.auth.isThisUserLoggedInOrError; then
+		eval "$@[2,-1]"
+	fi
+}
+zshbot.commands.registerCommand "raw" zshbot.admin.eval "Evaluates a shell line" "raw <line>" true
+
+# > .reload
+function zshbot.admin.reload {
+	if zshbot.auth.isThisUserLoggedInOrError; then
+		zshbot.core.reloadModules
+		zshbot.util.sendNotice "$target" "Reloaded"
+	fi
+}
+zshbot.commands.registerCommand "reload" zshbot.admin.reload "Reloads the bot" "reload" true

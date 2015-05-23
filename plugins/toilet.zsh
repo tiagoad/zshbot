@@ -2,13 +2,13 @@
 # Toilet spam
 
 # > .toilet <channel>
-function ircCmdToilet {
+function zshbot.toilet.toilet {
 	if isLineUserLoggedInOrError; then
 		local IFS=''
-		echo "$@[2,-1]" | toilet --gay --irc -f future | while read -r line; do
+		echo "$@[2,-1]" | cut -c 1-35 | toilet -w 999999999 --gay --irc -f future | while read -r line; do
 			echo "$line"
-			sendPrivMsg "$target" "$line"
+			zshbot.util.sendPrivMsg "$target" "$line"
 		done
 	fi
 }
-addIrcHook CMD_TOILET ircCmdToilet
+zshbot.commands.registerCommand "toilet" zshbot.toilet.toilet "Outputs big text using toilet" "toilet <text>"

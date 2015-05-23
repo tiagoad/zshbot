@@ -2,18 +2,18 @@
 # Utility functions
 
 # sends a line to the server
-# sendLine <line>
-function sendLine {
+# zshbot.util.sendLine <line>
+function zshbot.util.sendLine {
 	# debug output
-	echo "$fg[green]> $@$reset_color"
+	echo "$fg[green]< $@$reset_color"
 
 	# send to file descriptor
 	echo $@ >&$fd
 }
 
 # logs a line
-# logLine <line>
-function logLine {
+# zshbot.util.logLine <line>
+function zshbot.util.logLine {
 	echo "$fg[blue]? $@$reset_color"
 }
 
@@ -24,7 +24,7 @@ function logLine {
 # - hostname
 # or just
 # - server
-function parseHost {
+function zshbot.util.parseHost {
 	[[ $@ -regex-match "^:((.+)!(.+)@(.+)|[^@]+)$" ]]
 
 	if [[ ! $match[2] ]]; then
@@ -41,19 +41,19 @@ function parseHost {
 }
 
 # sends a PRIVMSG to a channel/user
-# sendPrivMsg <channel/user> <message>
-function sendPrivMsg {
-	sendLine "PRIVMSG $1 :$@[2,-1]"
+# zshbot.util.sendPrivMsg <channel/user> <message>
+function zshbot.util.sendPrivMsg {
+	zshbot.util.sendLine "PRIVMSG $1 :$@[2,-1]"
 }
 
 # sends a NOTICE to a channel/user
-# sendNotice <channel/user> <message>
-function sendNotice {
-	sendLine "NOTICE $1 :$@[2,-1]"
+# zshbot.util.sendNotice <channel/user> <message>
+function zshbot.util.sendNotice {
+	zshbot.util.sendLine "NOTICE $1 :$@[2,-1]"
 }
 
 # sends a CTCP response NOTICE to a channel/user
-# sendCtcpResponse <channel/user> <message>
-function sendCtcpReponse {
-	sendNotice "$1" "\001$@[2,-1]\001"
+# zshbot.util.sendCtcpReponse <channel/user> <message>
+function zshbot.util.sendCtcpReponse {
+	zshbot.util.sendNotice "$1" "\001$@[2,-1]\001"
 }

@@ -11,7 +11,7 @@ zmodload zsh/regex
 # load colors
 autoload -U colors && colors
 
-function reloadModules {
+function zshbot.core.reloadModules {
 	# load configurations
 	source config.zsh
 
@@ -21,55 +21,41 @@ function reloadModules {
 	# load hook system
 	source hooks.zsh
 
-	# load handlers
-	source handlers.zsh
-
-	# load special character constants
-	source chars.zsh
-
-	# load all plugins
+	# load all modules
 	for file in plugins/*; do
+		zshbot.util.logLine "Loaded $file"
 	    source "$file"
 	done
-
-	# set reload time
-	LAST_RELOAD=$(date +%s)
 }
-reloadModules
+zshbot.core.reloadModules
 
 # connect to IRC server
 ztcp $HOST $PORT
 fd=$REPLY
 
 # initialize connection
-sendLine "NICK $NICK"
-sendLine "USER $USER 8 * : $NAME"
+zshbot.util.sendLine "NICK $NICK"
+zshbot.util.sendLine "USER $USER 8 * : $NAME"
 
 # main loop
 while read -r line <&$fd; do
 	# remove carriage return
 	line=${line//$'\r'/}
 
-	# reload the modules every 10 seconds
-	delta_t="$(($(date +%s) - $LAST_RELOAD))"
-	if [[ $delta_t -gt $RELOAD_INTERVAL ]]; then
-		reloadModules
-	fi
-
 	# debug output
-	echo "$fg[red]< $line$reset_color"
+	echo "$fg[red]> $line$reset_color"
 
 	# split the string by spaces
 	args=("${(@s/ /)line}")
 
 	# filter commands
 	if [[ $args[1] == "PING" ]]; then
-		sendLine "PONG $args[2,-1]"
+		zshbot.util.sendLine "PONG $args[2,-1]"
 	else
 		# parse the hostname
-		parseHost "$args[1]"
+		zshbot.util.parseHost "$args[1]"
 
 		# trigger the hooks
-		triggerIrcHook $args[2] $args
+		zshbot.hooks.triggerHook $args[2] $args
 	fi
 done

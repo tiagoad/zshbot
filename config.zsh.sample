@@ -14,5 +14,4 @@ CHANNELS=(
 
 # instance options
 COMMAND_PREFIX="."
-RELOAD_INTERVAL="1"
 AUTH_PASSWORD="hackme"

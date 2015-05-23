@@ -2,10 +2,9 @@
 
 # > .insultme
 # < Fuck you!
-function ircCmdInsultMe {
+function zshbot.insult.insultme {
 	insult=$(curl -s http://www.insultgenerator.org/ | grep wrap -A3 | grep br | cut -c 9- | rev | cut -c 7- | rev)
 
-	sendPrivMsg "$target" "$nick: $insult"
+	zshbot.util.sendPrivMsg "$target" "$nick: $insult"
 }
-addIrcAsyncHook CMD_INSULTME ircCmdInsultMe
-addIrcAsyncHook CMD_INSULT ircCmdInsultMe
+zshbot.commands.registerCommand "insultme" zshbot.insult.insultme "Insults you" "insultme"
